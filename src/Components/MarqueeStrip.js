@@ -1,10 +1,5 @@
 import Star from '../pictures/Zvaigzde.svg';
 
-
-function Icon() {
-  return <Star />;
-}
-
 const ITEMS = [
   'BLENDER', 'UNITY', 'MAYA', 'C#', 'C++', 'JAVASCRIPT',
   'ADOBE SUITE'

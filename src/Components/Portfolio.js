@@ -81,20 +81,6 @@ const PROJECTS = [
 
 function ProjectCard({ project, hidden, onClick }) {
   const [bgImg, setBgImg] = useState(project.image || null);
-  const [showBtn, setShowBtn] = useState(!project.image);
-
-  const handleUpload = (e) => {
-    e.stopPropagation();
-    const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*';
-    inp.onchange = (ev) => {
-      const f = ev.target.files[0];
-      if (!f) return;
-      setBgImg(URL.createObjectURL(f));
-      setShowBtn(false);
-    };
-    inp.click();
-  };
 
   return (
     <div
@@ -136,12 +122,8 @@ function ProjectCard({ project, hidden, onClick }) {
 
 export default function Portfolio() {
   const [loaded, setLoaded] = useState(false);
-  const [clock, setClock] = useState('--:--:--');
   const [navScrolled, setNavScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  const [filter, setFilter] = useState('all');
-  const [logoSrc, setLogoSrc] = useState(null);
-  const [aboutPhoto, setAboutPhoto] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
 
   const curRef = useRef(null);

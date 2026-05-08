@@ -309,7 +309,6 @@ function ScrollHint({ visible }) {
 export default function GalleryPage({ project, onBack, isMobile }) {
   const [visible, setVisible] = useState(false);
   const [showHint, setShowHint] = useState(false);
-  const [, setPhotos] = useState({});
 
   const wrapRef = useRef(null);   // outer wrapper — translated vertically
   const heroRef = useRef(null);   // hero + stats block
