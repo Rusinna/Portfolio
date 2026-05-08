@@ -80,7 +80,7 @@ const PROJECTS = [
 // ── PROJECT CARD ──────────────────────────────────────────────────────────────
 
 function ProjectCard({ project, hidden, onClick }) {
-  const [bgImg, setBgImg] = useState(project.image || null);
+  const bgImg = project.image || null;
 
   return (
     <div
@@ -125,6 +125,7 @@ export default function Portfolio() {
   const [navScrolled, setNavScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
+  const [filter] = useState('all');
 
   const curRef = useRef(null);
   const ringRef = useRef(null);
