@@ -1,23 +1,23 @@
 import { useEffect, useRef } from 'react';
 
-const ORANGE = '#d84820';
-const TEAL   = '#7be0c8';
-const BLUE   = '#4a90d9';
+const ORANGE = '#BF300F';
+const TEAL = '#9CC1D9';
+const BLUE = '#4a90d9';
 
 export default function GameMonitor() {
   const screenRef = useRef(null);
   const canvasRef = useRef(null);
-  const scElRef   = useRef(null);
-  const lvElRef   = useRef(null);
+  const scElRef = useRef(null);
+  const lvElRef = useRef(null);
 
   useEffect(() => {
     const screen = screenRef.current;
     const canvas = canvasRef.current;
-    const ctx    = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     let W, H;
 
     const resize = () => {
-      W = canvas.width  = screen.clientWidth;
+      W = canvas.width = screen.clientWidth;
       H = canvas.height = screen.clientHeight;
     };
     resize();
@@ -26,13 +26,14 @@ export default function GameMonitor() {
 
     let raf, score, lives, player, bullets, alienBullets, aliens, particles, frame;
     let alienDir, alienMoveTimer, running;
-    const keys = {};
+
+
 
     function spawnParticle(x, y, color) {
       for (let i = 0; i < 8; i++) {
         const a = Math.random() * Math.PI * 2;
         const s = Math.random() * 2.5 + 0.5;
-        particles.push({ x, y, vx: Math.cos(a)*s, vy: Math.sin(a)*s, life: 1, color });
+        particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, color });
       }
     }
 
@@ -52,24 +53,24 @@ export default function GameMonitor() {
       score = 0; lives = 3; frame = 0;
       if (scElRef.current) scElRef.current.textContent = '0';
       if (lvElRef.current) lvElRef.current.textContent = '♦♦♦';
-      player       = { x: W / 2, y: H - 26, w: 24, h: 16, vx: 0 };
-      bullets      = [];
+      player = { x: W / 2, y: H - 26, w: 24, h: 16, vx: 0 };
+      bullets = [];
       alienBullets = [];
-      particles    = [];
+      particles = [];
       spawnAliens();
       running = true;
     }
 
     function drawPlayer(p) {
       ctx.fillStyle = ORANGE;
-      ctx.fillRect(p.x - p.w/2, p.y - p.h/2, p.w, p.h);
-      ctx.fillRect(p.x - 2, p.y - p.h/2 - 8, 4, 9);
+      ctx.fillRect(p.x - p.w / 2, p.y - p.h / 2, p.w, p.h);
+      ctx.fillRect(p.x - 2, p.y - p.h / 2 - 8, 4, 9);
       ctx.fillStyle = TEAL;
-      ctx.fillRect(p.x - p.w/2 - 5, p.y + 2, 6, 5);
-      ctx.fillRect(p.x + p.w/2 - 1, p.y + 2, 6, 5);
+      ctx.fillRect(p.x - p.w / 2 - 5, p.y + 2, 6, 5);
+      ctx.fillRect(p.x + p.w / 2 - 1, p.y + 2, 6, 5);
       // engine glow
       ctx.fillStyle = `rgba(216,72,32,0.4)`;
-      ctx.fillRect(p.x - 6, p.y + p.h/2, 12, 4);
+      ctx.fillRect(p.x - 6, p.y + p.h / 2, 12, 4);
     }
 
     function drawAlien(a) {
@@ -105,10 +106,9 @@ export default function GameMonitor() {
     function update() {
       frame++;
 
-      if (keys['ArrowLeft'] || keys['a']) player.vx = -4;
-      else if (keys['ArrowRight'] || keys['d']) player.vx = 4;
-      else player.vx *= 0.7;
-      player.x = Math.max(player.w/2, Math.min(W - player.w/2, player.x + player.vx));
+      player.vx *= 0.7;
+
+      player.x = Math.max(player.w / 2, Math.min(W - player.w / 2, player.x + player.vx));
 
       alienMoveTimer++;
       const moveEvery = Math.max(6, 26 - Math.floor(score / 40));
@@ -132,7 +132,7 @@ export default function GameMonitor() {
 
       if (frame % 40 === 0) bullets.push({ x: player.x, y: player.y - 12 });
 
-      bullets      = bullets.filter(b => b.y > 0);
+      bullets = bullets.filter(b => b.y > 0);
       bullets.forEach(b => b.y -= 6);
       alienBullets = alienBullets.filter(b => b.y < H);
       alienBullets.forEach(b => b.y += b.vy);
@@ -171,21 +171,21 @@ export default function GameMonitor() {
     function restartGame() {
       cancelAnimationFrame(raf);
       running = false;
-      ctx.fillStyle = 'rgba(8,11,26,0.88)';
+      ctx.fillStyle = '#131026';
       ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = ORANGE;
       ctx.font = 'bold 13px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('GAME OVER', W/2, H/2 - 10);
-      ctx.fillStyle = '#7b8ec8';
+      ctx.fillText('GAME OVER', W / 2, H / 2 - 10);
+      ctx.fillStyle = '#9CC1D9';
       ctx.font = '10px monospace';
-      ctx.fillText('score: ' + score, W/2, H/2 + 8);
+      ctx.fillText('score: ' + score, W / 2, H / 2 + 8);
       ctx.textAlign = 'left';
       setTimeout(() => { initGame(); raf = requestAnimationFrame(loop); }, 1500);
     }
 
     function render() {
-      ctx.fillStyle = '#080b1a';
+      ctx.fillStyle = '#131026';
       ctx.fillRect(0, 0, W, H);
 
       ctx.strokeStyle = 'rgba(74,85,128,0.07)';
@@ -234,19 +234,15 @@ export default function GameMonitor() {
       raf = requestAnimationFrame(loop);
     }
 
-    const onKeyDown = (e) => {
-      keys[e.key] = true;
-      if (e.key === ' ') { bullets.push({ x: player.x, y: player.y - 12 }); e.preventDefault(); }
-    };
-    const onKeyUp = (e) => { keys[e.key] = false; };
+
 
     let moveDir = 0;
     const onTouchStart = (e) => {
-      const tx  = e.touches[0].clientX;
+      const tx = e.touches[0].clientX;
       const rect = screen.getBoundingClientRect();
-      const rx  = tx - rect.left;
-      if      (rx < rect.width * 0.35) moveDir = -1;
-      else if (rx > rect.width * 0.65) moveDir =  1;
+      const rx = tx - rect.left;
+      if (rx < rect.width * 0.35) moveDir = -1;
+      else if (rx > rect.width * 0.65) moveDir = 1;
       else { bullets.push({ x: player.x, y: player.y - 12 }); moveDir = 0; }
     };
     const onTouchEnd = () => { moveDir = 0; };
@@ -259,12 +255,11 @@ export default function GameMonitor() {
     };
     const onClick = () => { if (running) bullets.push({ x: player.x, y: player.y - 12 }); };
 
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup',   onKeyUp);
+
     screen.addEventListener('touchstart', onTouchStart, { passive: true });
-    screen.addEventListener('touchend',   onTouchEnd,   { passive: true });
-    screen.addEventListener('mousemove',  onMouseMove);
-    screen.addEventListener('click',      onClick);
+    screen.addEventListener('touchend', onTouchEnd, { passive: true });
+    screen.addEventListener('mousemove', onMouseMove);
+    screen.addEventListener('click', onClick);
 
     initGame();
     raf = requestAnimationFrame(loop);
@@ -273,12 +268,11 @@ export default function GameMonitor() {
       cancelAnimationFrame(raf);
       clearInterval(touchInterval);
       ro.disconnect();
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('keyup',   onKeyUp);
+
       screen.removeEventListener('touchstart', onTouchStart);
-      screen.removeEventListener('touchend',   onTouchEnd);
-      screen.removeEventListener('mousemove',  onMouseMove);
-      screen.removeEventListener('click',      onClick);
+      screen.removeEventListener('touchend', onTouchEnd);
+      screen.removeEventListener('mousemove', onMouseMove);
+      screen.removeEventListener('click', onClick);
     };
   }, []);
 

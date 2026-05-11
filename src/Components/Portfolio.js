@@ -3,14 +3,16 @@ import PlasmaCanvas from './PlasmaCanvas';
 import GameMonitor from './GameMonitor';
 import MarqueeStrip from './MarqueeStrip';
 import ProjectPage from './ProjectPage';
-import Logo from '../pictures/LOGO.svg';
-import Zvaigzde from '../pictures/Zvaigzde.svg';
 import Profile from '../pictures/profile.png';
 import img2d from '../pictures/2d2.png';
 import imgKeeper from '../pictures/Keeper_plakatas.png';
 import img3d from '../pictures/3d2.png';
+
+//Icons
 import IconMail from '../pictures/Gmail.svg';
 import IconLinkedIn from '../pictures/LinkedIn.svg';
+import Logo from '../pictures/LOGO.svg';
+import Zvaigzde from '../pictures/Zvaigzde.svg';
 
 // Videos
 import vidPlatformer from '../pictures/2D_platformeris.mp4';
@@ -21,6 +23,10 @@ import vidKeeper from '../pictures/Keeper_filmukas.mp4';
 import titlePlatformer from '../pictures/PLATFORMINIS ŽAIDIMAS.svg';
 import titleMaze from '../pictures/TAMSUSIS LABIRINTAS.svg';
 import titleKeeper from '../pictures/KEEPER.svg';
+
+// Mobile Plasma
+import MobilePlasma1 from '../pictures/MobilePlasma1.1.svg';
+import MobilePlasma2 from '../pictures/MobilePlasma1.2.svg';
 
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -38,7 +44,7 @@ const PROJECTS = [
     titleSvg: titlePlatformer,
     desc: "Dviejų lygių 2D platforminis žaidimas, sukurtas savarankiškai.",
     fullDesc: "Savarankiškai sukūriau dviejų lygių 2D platforminį žaidimą. Projekte kūriau žaidimo koncepciją, mechanikas, lygių dizainą ir programavimo logiką.\nVizualiniams elementams daugiausia naudojau sprite'us iš viešai prieinamų šaltinių, o dalį jų sukūriau pati.\nŠis projektas leido giliau suprasti žaidėjo patirties formavimą, fizikos principų taikymą ir lygių balansavimo procesą.",
-    bgColor: '#0c161a',
+    bgColor: '#131026',
     image: img2d,
     video: vidPlatformer,
     year: '2023',
@@ -52,7 +58,7 @@ const PROJECTS = [
     titleSvg: titleMaze,
     desc: "Dviejų lygių pirmojo asmens 3D žaidimas, vykstantis tamsioje, riboto matomumo labirinto aplinkoje.",
     fullDesc: "„Tamsusis labirintas“ – 2 lygių pirmojo asmens 3D žaidimas, vykstantis tamsioje, riboto matomumo labirinto aplinkoje. Veikėjas turi pabėgti iš labirinto, kol yra sekamas pabaisos – šliaužiko.\nMano pagrindinis indėlis projekte apėmė 2 lygių žaidimo sukūrimą: programavimą ir tam tikrų vizualinių elementų kūrimą. Programavau pagrindines žaidimo sistemas: veikėjo judėjimą, labirinto logiką, susidūrimų sistemą bei žaidimo būsenų valdymą.\nDirbant komandoje integruoti Unity NavMesh komponentai, skirti šliaužiko navigacijai - veikėjo sekimui.",
-    bgColor: '#0b0909',
+    bgColor: '#131026',
     image: img3d,
     video: vidMaze,
     year: '2024',
@@ -66,7 +72,7 @@ const PROJECTS = [
     titleSvg: titleKeeper,
     desc: 'Trijų lygių 3D galvosūkių žaidimas 2035 m. požeminėje sėklų saugykloje.',
     fullDesc: "„Keeper“ – trijų lygių 3D galvosūkių žaidimas, kurio veiksmas vyksta 2035 metais požeminėje kapsulėje. Žaidėjas valdo robotą Keep, kurio tikslas – sustabdyti dirbtinį intelektą Aurą ir išgelbėti vertingas augalų sėklas. Žaidimas turi naratyvą.\nKomandoje kūriau kai kuriuos 3D modelius bei programavau visą žaidimą.",
-    bgColor: '#090d10',
+    bgColor: '#131026',
     image: imgKeeper,
     video: vidKeeper,
     year: '2025',
@@ -80,7 +86,7 @@ const PROJECTS = [
 // ── PROJECT CARD ──────────────────────────────────────────────────────────────
 
 function ProjectCard({ project, hidden, onClick }) {
-  const bgImg = project.image || null;
+  const [bgImg] = useState(project.image || null);
 
   return (
     <div
@@ -90,11 +96,11 @@ function ProjectCard({ project, hidden, onClick }) {
     >
       {/* SVG kampų rėmeliai */}
       <svg className="pcard-corner pcard-corner--tl" viewBox="0 0 24 24" fill="none">
-        <path d="M2 22V2h20" stroke="#d84820" strokeWidth="2">
+        <path d="M2 22V2h20" stroke="var(--red)" strokeWidth="2">
         </path>
       </svg>
       <svg className="pcard-corner pcard-corner--br" viewBox="0 0 24 24" fill="none">
-        <path d="M22 2v20H2" stroke="#d84820" strokeWidth="2">
+        <path d="M22 2v20H2" stroke="var(--red)" strokeWidth="2">
         </path>
       </svg>
 
@@ -125,12 +131,10 @@ export default function Portfolio() {
   const [navScrolled, setNavScrolled] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
-  const [filter] = useState('all');
 
   const curRef = useRef(null);
   const ringRef = useRef(null);
-  const aPhotoRef = useRef(null);
-  const aLayerRef = useRef(null);
+
 
   // Loader
   useEffect(() => {
@@ -195,37 +199,6 @@ export default function Portfolio() {
     return () => obs.disconnect();
   }, [loaded, activeProject]);
 
-  // About photo parallax
-
-  useEffect(() => {
-    const wrap = aPhotoRef.current, layer = aLayerRef.current;
-    if (!wrap || !layer) return;
-    let tx = 0, ty = 0, cx = 0, cy = 0, rafId;
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const onMove = (e) => {
-      const r = wrap.getBoundingClientRect();
-      tx = -((e.clientX - r.left) / r.width - 0.5) * 18;
-      ty = -((e.clientY - r.top) / r.height - 0.5) * 12;
-    };
-    const loop = () => {
-      cx = lerp(cx, tx, 0.08); cy = lerp(cy, ty, 0.08);
-      layer.style.transform = `translate(${cx}px,${cy}px) scale(1.07)`;
-      rafId = requestAnimationFrame(loop);
-    };
-    const onEnter = () => { rafId = requestAnimationFrame(loop); };
-    const onLeave = () => { tx = 0; ty = 0; cancelAnimationFrame(rafId); };
-    wrap.addEventListener('mouseenter', onEnter);
-    wrap.addEventListener('mousemove', onMove);
-    wrap.addEventListener('mouseleave', onLeave);
-    return () => {
-      cancelAnimationFrame(rafId);
-      wrap.removeEventListener('mouseenter', onEnter);
-      wrap.removeEventListener('mousemove', onMove);
-      wrap.removeEventListener('mouseleave', onLeave);
-    };
-  }, []);
-
-
   // Jei aktyvus projektas – rodome ProjectPage
   if (activeProject) {
     return (
@@ -241,15 +214,15 @@ export default function Portfolio() {
       {/* LOADER */}
       <div className={`loader${loaded ? ' loader--done' : ''}`}>
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="40" r="34" stroke="#d84820" strokeWidth="1" strokeDasharray="8 5">
+          <circle cx="40" cy="40" r="34" stroke="var(--red)" strokeWidth="1" strokeDasharray="8 5">
             <animateTransform attributeName="transform" type="rotate"
               from="0 40 40" to="360 40 40" dur="3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="40" cy="40" r="20" stroke="#b8cdd8" strokeWidth="0.5" strokeDasharray="3 7">
+          <circle cx="40" cy="40" r="20" stroke="#9CC1D9" strokeWidth="0.5" strokeDasharray="3 7">
             <animateTransform attributeName="transform" type="rotate"
               from="360 40 40" to="0 40 40" dur="5s" repeatCount="indefinite" />
           </circle>
-          <circle cx="40" cy="40" r="5" fill="#d84820">
+          <circle cx="40" cy="40" r="5" fill="var(--red)">
             <animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite" />
           </circle>
         </svg>
@@ -308,6 +281,12 @@ export default function Portfolio() {
 
         {/* Hero turinys */}
         <div className="container-fluid hero-container">
+
+          {/* Monitorius VIRŠ teksto — rodomas tik tablet/mobile (<768px) */}
+          <div className="hero-monitor-top">
+            <GameMonitor />
+          </div>
+
           <div className="hero-wrapper">
             <div className="row align-items-end hero-row">
 
@@ -321,7 +300,7 @@ export default function Portfolio() {
                   <div className="hero-specs">
                     {['Žaidimų kūrėja', 'Programuotoja', '3D Modeliuotoja'].map((s, i) => (
                       <span key={i} className="hero-spec">
-                        {i !== 0 && <img src={Zvaigzde} alt="" width="30" height="30" />}
+                        {i !== 0 && <img src={Zvaigzde} alt="" width="14" height="14" />}
                         {s}
                       </span>
                     ))}
@@ -340,7 +319,7 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              {/* DEŠINĖ – žaidimas */}
+              {/* DEŠINĖ – žaidimas, rodomas tik desktop (≥769px tarpinis + ≥lg) */}
               <div className="col-lg-7 hero-right">
                 <GameMonitor />
               </div>
@@ -357,6 +336,8 @@ export default function Portfolio() {
 
       {/* ── CONTENT WRAPPER ── */}
       <div className="content-bg-wrap">
+        <img src={MobilePlasma1} className="mobile-plasma mp-1" alt="" />
+        <img src={MobilePlasma2} className="mobile-plasma mp-2" alt="" />
 
         {/* ── APIE ── */}
         <section id="about">
@@ -373,10 +354,10 @@ export default function Portfolio() {
                 <div className="about-photo-wrap" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
                   {/* SVG kampų rėmeliai */}
                   <svg className="about-corner about-corner--tl" viewBox="0 0 24 24" fill="none">
-                    <path d="M2 22V2h20" stroke="#d84820" strokeWidth="2"></path>
+                    <path d="M2 22V2h20" stroke="var(--red)" strokeWidth="2"></path>
                   </svg>
                   <svg className="about-corner about-corner--br" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2v20H2" stroke="#d84820" strokeWidth="2"></path>
+                    <path d="M22 2v20H2" stroke="var(--red)" strokeWidth="2"></path>
                   </svg>
                   <img src={Profile} alt="Rusnė Stankevičiūtė" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
@@ -384,7 +365,7 @@ export default function Portfolio() {
 
 
               {/* Tekstas */}
-              <div className="col-lg-7 reveal" style={{ transitionDelay: '0.15s' }}>
+              <div className="col-md-6 col-lg-7 reveal" style={{ transitionDelay: '0.15s' }}>
                 <div className="about-text">
                   <p>Esu Rusnė Stankevičiūtė – multimedijos ir kompiuterinio dizaino studentė Vilnius Tech universitete.</p>
                   <p>Domiuosi žaidimų kūrimo procesu nuo pirminės koncepcijos ir scenarijaus iki dvimatės ir trimatės aplinkos kūrimo bei žaidimo mechanikų.</p>
@@ -413,7 +394,6 @@ export default function Portfolio() {
                 <div key={p.id} className="col-md-6 col-lg-4 reveal" style={{ transitionDelay: `${i * 0.1}s` }}>
                   <ProjectCard
                     project={p}
-                    hidden={filter !== 'all' && filter !== p.cat}
                     onClick={setActiveProject}
                   />
                 </div>

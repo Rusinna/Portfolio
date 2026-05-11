@@ -20,7 +20,7 @@ export default function ProjectPage({ project, onBack }) {
   }, []);
 
   if (showGallery) {
-    return <GalleryPage project={project} onBack={() => setShowGallery(false)} />;
+    return <GalleryPage project={project} onBack={() => setShowGallery(false)} isMobile={isMobile} />;
   }
 
   return (
@@ -38,36 +38,7 @@ export default function ProjectPage({ project, onBack }) {
             className="project-bg-video"
           />
         ) : (
-          <div className="project-bg-fallback" style={{ background: project.bgColor || '#0c161a' }}>
-            {/* Animuotas SVG fonas */}
-            <svg width="100%" height="100%" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <radialGradient id="pgrd" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#d84820" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#080b1a" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <rect width="1200" height="700" fill="url(#pgrd)" />
-              {Array.from({ length: 6 }, (_, i) => (
-                <circle key={i} cx={200 + i * 160} cy={350} r={80 + i * 20}
-                  stroke="#d84820" strokeWidth="0.5" fill="none" opacity="0.1">
-                  <animate attributeName="r" values={`${80 + i * 20};${110 + i * 20};${80 + i * 20}`}
-                    dur={`${4 + i}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.05;0.2;0.05"
-                    dur={`${4 + i}s`} repeatCount="indefinite" />
-                </circle>
-              ))}
-              {/* Grid */}
-              {Array.from({ length: 20 }, (_, i) => (
-                <line key={`v${i}`} x1={i * 64} y1="0" x2={i * 64} y2="700"
-                  stroke="rgba(184,205,216,0.04)" strokeWidth="1" />
-              ))}
-              {Array.from({ length: 12 }, (_, i) => (
-                <line key={`h${i}`} x1="0" y1={i * 64} x2="1200" y2={i * 64}
-                  stroke="rgba(184,205,216,0.04)" strokeWidth="1" />
-              ))}
-            </svg>
-          </div>
+          <div className="project-bg-fallback" style={{ background: project.bgColor || '#131026' }}></div>
         )}
         {/* Overlay */}
         <div className="project-bg-overlay" />
@@ -159,16 +130,6 @@ export default function ProjectPage({ project, onBack }) {
           </button>
         </div>
       </div>
-
-      {/* Mobile background decor */}
-      {isMobile && (
-        <div className="project-mobile-decor">
-          <svg viewBox="0 0 400 200" preserveAspectRatio="none">
-            <path d="M0,150 Q100,100 200,150 T400,150 V200 H0 Z" fill="#bf300f" opacity="0.1" />
-            <path d="M0,170 Q150,120 300,170 T400,170 V200 H0 Z" fill="#bf300f" opacity="0.2" />
-          </svg>
-        </div>
-      )}
     </div>
   );
 }
